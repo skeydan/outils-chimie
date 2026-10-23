@@ -1,0 +1,5 @@
+/* Redox tab only (scoped to its panel). Long equations wrap between terms on narrow screens
+   (terms themselves never break); the shared rule keeps them on one line. */
+#panel-redox .eqn .op, #panel-redox .eqn .arrow { white-space: pre-wrap; }
+#panel-redox .ox-rules .eq-block { margin: 4px 0 8px; }
+#panel-redox #rx-result .chg { margin-top: 2px; }

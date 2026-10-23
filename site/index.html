@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>outils-chimie</title>
+  <meta name="description" content="Chemistry tools with every step explained and every number sourced: Lewis structures, oxidation numbers and redox, acids and bases. French and English.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <link rel="stylesheet" href="redox/redox.css">
+  <link rel="stylesheet" href="acidbase/acidbase.css">
+  <script>
+    try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <script type="module" src="assets/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main" data-i18n="shell.skip">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="./">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><path d="M14 3 L23.5 8.5 V19.5 L14 25 L4.5 19.5 V8.5 Z" fill="none" stroke="var(--violet)" stroke-width="2.2" stroke-linejoin="round"/><circle cx="10.8" cy="14" r="2.3" fill="var(--electron)"/><circle cx="17.2" cy="14" r="2.3" fill="var(--electron)"/></svg>
+      <span data-i18n="shell.home">outils-chimie</span>
+    </a>
+    <div class="header-tools">
+      <div class="seg" role="group" aria-label="Language / Langue">
+        <button type="button" data-lang-btn="fr" lang="fr">FR</button>
+        <button type="button" data-lang-btn="en" lang="en">EN</button>
+      </div>
+      <button type="button" class="chip-btn" data-theme-btn data-i18n-attr="aria-label:shell.theme;title:shell.theme">
+        <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5 A6.5 6.5 0 0 1 8 14.5 Z" fill="currentColor"/></svg>
+      </button>
+    </div>
+  </header>
+  <div class="band" aria-hidden="true"></div>
+  <main id="main">
+    <div class="tabs" role="tablist" aria-label="Tools" data-i18n-attr="aria-label:tabs.label">
+      <a role="tab" id="tab-lewis" href="#lewis" aria-controls="panel-lewis" aria-selected="false" tabindex="-1" style="--accent: var(--electron)"><span data-i18n="tab.lewis">Lewis</span></a>
+      <a role="tab" id="tab-redox" href="#redox" aria-controls="panel-redox" aria-selected="false" tabindex="-1" style="--accent: var(--donor)"><span data-i18n="tab.redox">Redox</span><span class="tab-more" data-i18n="tab.redox.more"> (oxidation numbers)</span></a>
+      <a role="tab" id="tab-acidbase" href="#acidbase" aria-controls="panel-acidbase" aria-selected="false" tabindex="-1" style="--accent: var(--acceptor)"><span data-i18n="tab.acidbase">Acid–base</span></a>
+    </div>
+    <noscript><p>This page needs JavaScript. / Cette page nécessite JavaScript.</p></noscript>
+    <section class="panel" role="tabpanel" id="panel-lewis" aria-labelledby="tab-lewis" tabindex="0" hidden></section>
+    <section class="panel" role="tabpanel" id="panel-redox" aria-labelledby="tab-redox" tabindex="0" hidden></section>
+    <section class="panel" role="tabpanel" id="panel-acidbase" aria-labelledby="tab-acidbase" tabindex="0" hidden></section>
+  </main>
+  <footer class="site-footer"><p data-i18n="footer"></p></footer>
+</body>
+</html>

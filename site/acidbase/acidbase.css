@@ -1,0 +1,40 @@
+/* Acid-base tab: what site.css does not have (scoped to its panel). */
+
+/* stacked fraction inside equations */
+#panel-acidbase .frac { display: inline-grid; grid-template-rows: auto auto; text-align: center; vertical-align: middle; margin: 0 3px; line-height: 1.3; font-size: 0.95em; }
+#panel-acidbase .frac .fn { border-bottom: 1px solid currentColor; padding: 0 4px 1px; }
+#panel-acidbase .frac .fd { padding: 1px 4px 0; }
+#panel-acidbase .eq-block { line-height: 1.9; }
+
+/* conjugate pair equations wrap on phones */
+#panel-acidbase .pair-eq { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0 2px; margin: 4px 0 8px; }
+#panel-acidbase .pair-eq .op { white-space: pre; color: var(--ink-2); padding-bottom: 1.1em; }
+
+/* hero numbers */
+#panel-acidbase .hero.small-hero { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); color: var(--ink-2); }
+#panel-acidbase .note.ok-note { background: var(--surface-2); }
+#panel-acidbase .kv.ice { width: auto; min-width: min(100%, 26em); }
+#panel-acidbase .ice th, #panel-acidbase .ice td { min-width: 4.5em; }
+#panel-acidbase .phbar { margin-bottom: 52px; }
+#panel-acidbase .legend-line { margin: 6px 0 2px; }
+
+/* distribution of forms: one hue, bars from a shared baseline, value at the tip */
+#panel-acidbase .dist { display: grid; gap: 6px; margin: 4px 0 2px; max-width: 560px; }
+#panel-acidbase .dist-row { display: grid; grid-template-columns: minmax(5.5em, auto) minmax(0, 1fr) 5.5em; gap: 10px; align-items: center; font-size: 0.95rem; }
+#panel-acidbase .dist-track { position: relative; height: 12px; }
+#panel-acidbase .dist-bar { display: block; height: 12px; background: var(--violet); border-radius: 0 4px 4px 0; min-width: 2px; }
+#panel-acidbase .dist-val { font-variant-numeric: tabular-nums; text-align: right; color: var(--ink-2); font-size: 0.88rem; }
+
+/* titration */
+#panel-acidbase .tchart { margin-top: 8px; }
+#panel-acidbase .tc-hit { touch-action: pan-y; }
+#panel-acidbase #t-read { margin-top: 10px; }
+#panel-acidbase #t-read p { margin: 0 0 4px; }
+#panel-acidbase #t-slider { margin: 6px 0 2px; }
+#panel-acidbase .field-label output { font-weight: 650; color: var(--ink); }
+#panel-acidbase .phbar .side { white-space: nowrap; }
+@media (max-width: 480px) {
+  #panel-acidbase .phbar .tick:nth-child(5) { display: none; } /* 7: the "neutral" label carries it */
+}
+/* the reading dot is ink, so it never looks like an equivalence marker */
+#panel-acidbase .tc-dot { fill: var(--ink); }
