@@ -4,12 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>outils-chimie</title>
-  <meta name="description" content="Chemistry tools with every step explained and every number sourced: Lewis structures, oxidation numbers and redox, acids and bases. French and English.">
+  <meta name="description" content="Chemistry tools with every step explained and every number sourced: Lewis structures, oxidation numbers and redox, acids and bases, IUPAC nomenclature of inorganic compounds. French and English.">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css">
   <link rel="stylesheet" href="redox/redox.css">
   <link rel="stylesheet" href="acidbase/acidbase.css">
+  <link rel="stylesheet" href="nomenclature/nomenclature.css">
   <script>
     try { const t = localStorage.getItem('theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
   </script>
@@ -38,11 +39,13 @@
       <a role="tab" id="tab-lewis" href="#lewis" aria-controls="panel-lewis" aria-selected="false" tabindex="-1" style="--accent: var(--electron)"><span data-i18n="tab.lewis">Lewis</span></a>
       <a role="tab" id="tab-redox" href="#redox" aria-controls="panel-redox" aria-selected="false" tabindex="-1" style="--accent: var(--donor)"><span data-i18n="tab.redox">Redox</span><span class="tab-more" data-i18n="tab.redox.more"> (oxidation numbers)</span></a>
       <a role="tab" id="tab-acidbase" href="#acidbase" aria-controls="panel-acidbase" aria-selected="false" tabindex="-1" style="--accent: var(--acceptor)"><span data-i18n="tab.acidbase">Acid–base</span></a>
+      <a role="tab" id="tab-nomenclature" href="#nomenclature" aria-controls="panel-nomenclature" aria-selected="false" tabindex="-1" style="--accent: var(--violet)"><span data-i18n="tab.nomenclature">Nomenclature</span></a>
     </div>
     <noscript><p>This page needs JavaScript. / Cette page nécessite JavaScript.</p></noscript>
     <section class="panel" role="tabpanel" id="panel-lewis" aria-labelledby="tab-lewis" tabindex="0" hidden></section>
     <section class="panel" role="tabpanel" id="panel-redox" aria-labelledby="tab-redox" tabindex="0" hidden></section>
     <section class="panel" role="tabpanel" id="panel-acidbase" aria-labelledby="tab-acidbase" tabindex="0" hidden></section>
+    <section class="panel" role="tabpanel" id="panel-nomenclature" aria-labelledby="tab-nomenclature" tabindex="0" hidden></section>
   </main>
   <footer class="site-footer"><p data-i18n="footer"></p></footer>
 </body>

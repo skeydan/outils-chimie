@@ -3,7 +3,7 @@
 Chemistry tools for anyone learning chemistry: each one shows its reasoning
 step by step and says where its numbers come from. French and English
 (follows the browser language, with a switch), light and dark, works on
-phones. One static page with three tabs: no backend, no build step, no
+phones. One static page with one tab per tool: no backend, no build step, no
 tracking. Every number and fact comes from a cited source, listed at the
 bottom of each tab.
 
@@ -45,8 +45,17 @@ bottom of each tab.
   with buffer regions, equivalence and half-equivalence points, a slider
   and pointer reading of what the flask holds, and the four textbook points
   next to the exact values. Last, which way a proton transfer goes.
+- **Nomenclature** (tab `#nomenclature`, code in `site/nomenclature/`): how
+  an inorganic compound gets its systematic IUPAC name. Five principles in
+  the order they apply (cation first, the -ide ending, multiplicative
+  prefixes, Stock numerals, charge number versus oxidation state), a
+  decision tree, family-by-family rules for oxides, hydrides, binary and
+  oxoacids, salts and hydrates, tables of prefixes, polyatomic ions and the
+  oxoacid ladder, 42 worked examples with the reasoning and an
+  oxidation-state diagram, and a ten-question quiz in both directions
+  (formula → name, name → formula) with immediate feedback.
 
-## One page, three tabs
+## One page, one tab per tool
 
 The page opens on the Lewis tab. The URL hash holds the tab and that
 tab's state, so a structure, a reaction or a titration can be shared as a
@@ -65,8 +74,9 @@ structure”, “Oxidation numbers and redox reactions”) open the other tab. T
 tab bar follows the ARIA tabs pattern: arrow keys move between tabs
 (wrapping), Home and End go to the first and last, Tab goes into the
 open panel; it stays at the top of the screen while a tool scrolls, and
-on phones the three tabs share the width with 44 px targets. A tool's
-code is loaded the first time its tab opens. Citations ([1], [2]...)
+on phones it scrolls sideways when the tabs no longer fit, keeping the
+selected tab in view, with 44 px targets. A tool's code is loaded the
+first time its tab opens. Citations ([1], [2]...)
 scroll to their source without changing the URL.
 
 ## How the Lewis engine works
@@ -181,6 +191,7 @@ site/
   redox/                  Redox tab (js/couples.js: potentials, js/balance.js: half-reaction method)
   acidbase/               Acid–base tab (js/data.js: Ka, Kb, reagents; js/equilibrium.js: exact pH;
                           js/model.js: textbook routes; js/chart.js: titration curve)
+  nomenclature/           Nomenclature tab (js/data.js: prefixes, ions, worked examples, quiz items)
 deploy/default.conf.template   nginx config
 tests/                    node:test unit tests
 scripts/                  e2e browser checks

@@ -3,6 +3,7 @@ export const COMMON = {
   'nav.lewis': { en: 'Lewis structures', fr: 'Schémas de Lewis' },
   'nav.redox': { en: 'Redox', fr: 'Oxydoréduction' },
   'nav.acidbase': { en: 'Acids and bases', fr: 'Acides et bases' },
+  'nav.nomenclature': { en: 'Nomenclature of inorganic compounds', fr: 'Nomenclature des composés inorganiques' },
   footer: {
     en: 'Independent personal project. Texts and drawings are original; data come from the sources listed on each page.',
     fr: 'Projet personnel indépendant. Textes et dessins originaux ; les données viennent des sources citées sur chaque page.',

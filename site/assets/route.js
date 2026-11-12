@@ -1,10 +1,11 @@
 // Hash routes of the single-page app: #<tab>?<state of that tab>.
 //   #lewis?f=SO4%5E2-          #redox?sp=MnO4-&m=acid&ox=MnO4&red=Fe3
 //   #acidbase?ph=HCl&c=0.01    #lewis (the tab with its default state)
+//   #nomenclature              #biochimie
 // Any other hash (#src-..., #main, empty) is not a route: the page anchors
 // use it, and the app opens on the first tab.
 
-export const TABS = ['lewis', 'redox', 'acidbase'];
+export const TABS = ['lewis', 'redox', 'acidbase', 'nomenclature'];
 export const DEFAULT_TAB = TABS[0];
 
 /** '#redox?sp=Cu' -> { tab: 'redox', query: 'sp=Cu' }; null when the hash is not a route. */

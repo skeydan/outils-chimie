@@ -16,6 +16,7 @@ const LOADERS = {
   lewis: () => import('../lewis/js/app.js'),
   redox: () => import('../redox/js/app.js'),
   acidbase: () => import('../acidbase/js/app.js'),
+  nomenclature: () => import('../nomenclature/js/app.js'),
 };
 const DICT = {
   ...COMMON,
@@ -24,6 +25,7 @@ const DICT = {
   'tab.redox': { en: 'Redox', fr: 'Rédox' },
   'tab.redox.more': { en: ' (oxidation numbers)', fr: ' (nombres d’oxydation)' },
   'tab.acidbase': { en: 'Acid–base', fr: 'Acide–base' },
+  'tab.nomenclature': { en: 'Nomenclature', fr: 'Nomenclature' },
   loading: { en: 'Loading…', fr: 'Chargement…' },
   'load.error': { en: 'This tool could not be loaded. Reload the page to try again.', fr: 'Cet outil n’a pas pu être chargé. Rechargez la page pour réessayer.' },
 };
@@ -58,6 +60,14 @@ function updateHrefs() {
   for (const tab of TABS) tabEl(tab).setAttribute('href', routeHash(tab, queries[tab]));
 }
 
+/** Keep the selected tab visible when the bar scrolls sideways on a phone. */
+function scrollTabIntoView(el) {
+  const r = el.getBoundingClientRect();
+  const lr = tablist.getBoundingClientRect();
+  if (r.left < lr.left) tablist.scrollLeft -= lr.left - r.left + 8;
+  else if (r.right > lr.right) tablist.scrollLeft += r.right - lr.right + 8;
+}
+
 function setTitle() {
   document.title = `${t(`nav.${active}`)} · outils-chimie`;
 }
@@ -79,6 +89,7 @@ async function open(tab, { focusPanel = false, toTop = false } = {}) {
     tabEl(x).setAttribute('aria-selected', String(on));
     tabEl(x).tabIndex = on ? 0 : -1;
     panelEl(x).hidden = !on;
+    if (on) scrollTabIntoView(tabEl(x));
   }
   setTitle();
   const panel = panelEl(tab);

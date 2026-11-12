@@ -41,7 +41,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
 const text = async (page, sel) => (await page.textContent(sel))?.replace(/\s+/g, ' ').trim() ?? '';
 /** Wait until the tab named in the hash is shown and its tool is built. */
 const ready = (page) => page.waitForFunction(() => {
-  const tab = (location.hash.match(/^#(lewis|redox|acidbase)/) ?? [, 'lewis'])[1];
+  const tab = (location.hash.match(/^#(lewis|redox|acidbase|nomenclature|biochimie)/) ?? [, 'lewis'])[1];
   const panel = document.getElementById(`panel-${tab}`);
   return panel && !panel.hidden && !panel.hasAttribute('aria-busy') && panel.querySelector('h1');
 });
@@ -58,6 +58,7 @@ const PAGES = [
   ['lewis-no2', '#lewis?f=NO2'],
   ['redox', '#redox'],
   ['acidbase', '#acidbase'],
+  ['nomenclature', '#nomenclature'],
 ];
 for (const device of Object.keys(devices)) {
   for (const scheme of ['light', 'dark']) {
@@ -83,7 +84,7 @@ for (const device of Object.keys(devices)) {
   await go(page, '');
   // The app opens on the Lewis tab; the other tools are loaded only when opened.
   ok((await page.evaluate(() => location.hash)) === '#lewis?f=SO4%5E2-', `tabs: opens on Lewis (${await page.evaluate(() => location.hash)})`);
-  ok(scripts.includes('/lewis/js/app.js') && !scripts.some((u) => /\/(redox|acidbase)\//.test(u)), `tabs: only the Lewis code loaded at first: ${scripts.join(' ')}`);
+  ok(scripts.includes('/lewis/js/app.js') && !scripts.some((u) => /\/(redox|acidbase|nomenclature|biochimie)\//.test(u)), `tabs: only the Lewis code loaded at first: ${scripts.join(' ')}`);
   ok((await page.title()) === 'Lewis structures · outils-chimie', `tabs: title ${await page.title()}`);
   // ARIA tabs: one tablist, three tabs, each controlling one panel; one panel shown.
   const aria = await page.evaluate(() => {
@@ -97,8 +98,8 @@ for (const device of Object.keys(devices)) {
       h1: document.querySelectorAll('h1').length,
     };
   });
-  ok(aria.names.join('|') === 'Lewis|Redox (oxidation numbers)|Acid–base', `tabs: names ${aria.names}`);
-  ok(aria.selected.join() === 'true,false,false' && aria.tabindex.join() === '0,-1,-1', `tabs: selection ${aria.selected} ${aria.tabindex}`);
+  ok(aria.names.slice(0, 3).join('|') === 'Lewis|Redox (oxidation numbers)|Acid–base' && aria.names.length >= 4, `tabs: names ${aria.names}`);
+  ok(aria.selected[0] === 'true' && aria.selected.slice(1).every((v) => v === 'false') && aria.tabindex[0] === 0 && aria.tabindex.slice(1).every((v) => v === -1), `tabs: selection ${aria.selected} ${aria.tabindex}`);
   ok(aria.wired, 'tabs: aria-controls and aria-labelledby');
   ok(aria.shown.join() === 'panel-lewis' && aria.h1 === 1, `tabs: one panel shown (${aria.shown}), one h1 (${aria.h1})`);
 
@@ -112,18 +113,20 @@ for (const device of Object.keys(devices)) {
   await page.keyboard.press('ArrowLeft');
   await page.keyboard.press('ArrowLeft');
   await ready(page);
-  ok((await page.evaluate(() => [document.activeElement.id, location.hash.split('?')[0]].join())) === 'tab-acidbase,#acidbase', 'tabs: ArrowLeft wraps to Acid–base');
+  ok((await page.evaluate(() => [document.activeElement.id, location.hash.split('?')[0]].join())) === 'tab-nomenclature,#nomenclature', 'tabs: ArrowLeft wraps to the last tab');
   await page.keyboard.press('Home');
   await ready(page);
   ok((await page.evaluate(() => location.hash)) === '#lewis?f=SO4%5E2-', 'tabs: Home opens Lewis with its state');
   await page.keyboard.press('End');
   await ready(page);
-  ok(await page.isVisible('#ph-value'), 'tabs: End opens Acid–base');
+  ok(await page.isVisible('#nc-quiz'), 'tabs: End opens the last tab (Nomenclature)');
   // Tab key from the tab bar goes into the panel, not to the other tabs.
   await page.keyboard.press('Tab');
-  ok((await page.evaluate(() => document.activeElement.id)) === 'panel-acidbase', `tabs: Tab enters the panel (${await page.evaluate(() => document.activeElement.id)})`);
+  ok((await page.evaluate(() => document.activeElement.id)) === 'panel-nomenclature', `tabs: Tab enters the panel (${await page.evaluate(() => document.activeElement.id)})`);
 
   // Each tab keeps its state in the URL; the tab links carry it when you come back.
+  await page.click('#tab-acidbase');
+  await ready(page);
   await page.selectOption('#ph-species', 'HCl');
   ok((await page.evaluate(() => location.hash)) === '#acidbase?ph=HCl', `tabs: acid-base state in the hash (${await page.evaluate(() => location.hash)})`);
   await page.click('#tab-lewis');
@@ -178,14 +181,14 @@ for (const device of Object.keys(devices)) {
   await ctx.close();
 }
 {
-  // Phone: the three tabs fit, a tap opens one, and the tab bar stays on screen while scrolling.
+  // Phone: the tabs may scroll sideways, a tap opens one, and the bar stays on screen.
   const { ctx, page } = await newPage('phone', 'light', 'fr');
   await go(page, '');
   const widths = await page.evaluate(() => {
     const bar = document.querySelector('[role="tablist"]');
     return { bar: bar.clientWidth, scroll: bar.scrollWidth, h: Math.min(...[...bar.children].map((t) => t.getBoundingClientRect().height)) };
   });
-  ok(widths.scroll <= widths.bar, `tabs phone: the three tabs fit (${widths.scroll} > ${widths.bar})`);
+  ok(widths.scroll >= widths.bar, `tabs phone: the bar scrolls instead of overflowing the page (${widths.scroll} / ${widths.bar})`);
   ok(widths.h >= 44, `tabs phone: tap targets at least 44 px (${widths.h})`);
   await page.tap('#tab-redox');
   await ready(page);
@@ -197,6 +200,14 @@ for (const device of Object.keys(devices)) {
   await ready(page);
   const y = await page.evaluate(() => document.querySelector('[role="tablist"]').getBoundingClientRect().top);
   ok(Math.abs(y) < 1 && (await page.evaluate(() => document.getElementById('panel-acidbase').getBoundingClientRect().top)) > 0, 'tabs phone: a new tab starts at its top');
+  await page.tap('#tab-nomenclature');
+  await ready(page);
+  const lastVisible = await page.evaluate(() => {
+    const t = document.getElementById('tab-nomenclature').getBoundingClientRect();
+    const b = document.querySelector('[role="tablist"]').getBoundingClientRect();
+    return t.left >= b.left - 1 && t.right <= b.right + 1;
+  });
+  ok(lastVisible, 'tabs phone: the selected tab is scrolled into view');
   await page.screenshot({ path: `${SHOTS}/tabs-phone-fr.png` });
   await ctx.close();
 }
@@ -365,6 +376,26 @@ for (const device of Object.keys(devices)) {
   await page.touchscreen.tap(b2.x + b2.width * 0.7, b2.y + b2.height * 0.4);
   ok(/pH/.test(await text(page, '#t-read')), 'acid-base phone: tap reading');
   void box;
+  await ctx.close();
+}
+
+// ---------------------------------------------------------------- Nomenclature
+{
+  const { ctx, page } = await newPage('desktop', 'light', 'fr');
+  await go(page, '#nomenclature');
+  ok(/Nommer les composés/.test(await text(page, '#panel-nomenclature h1')), 'nomenclature: French title');
+  ok((await page.locator('.nc-ex').count()) >= 30, 'nomenclature: worked examples drawn');
+  ok((await page.locator('.nc-ex .ox-species').count()) >= 8, 'nomenclature: oxidation-state diagrams drawn');
+  ok((await page.locator('.sources li').count()) >= 7, 'nomenclature: sources listed');
+  ok((await page.locator('#nc-quiz .nc-qz-opt').count()) === 4, 'nomenclature: four quiz options');
+  await page.locator('#nc-quiz .nc-qz-opt').first().click();
+  ok(/./.test(await text(page, '#nc-quiz .nc-qz-feedback')), 'nomenclature: immediate feedback');
+  ok((await page.locator('#nc-quiz .nc-qz-feedback button').count()) === 1, 'nomenclature: next question offered');
+  await page.locator('#nc-quiz .nc-qz-feedback button').click();
+  ok((await page.locator('#nc-quiz .nc-qz-card .nc-qz-n').textContent()).includes('2'), 'nomenclature: question counter advances');
+  await page.locator('#nc-quiz .nc-mode button[data-mode="n2f"]').click();
+  ok((await page.locator('#nc-quiz .nc-qz-target.is-name').count()) === 1, 'nomenclature: name-to-formula mode shows a name');
+  await page.screenshot({ path: `${SHOTS}/interact-nomenclature-fr.png`, fullPage: true });
   await ctx.close();
 }
 
