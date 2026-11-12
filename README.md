@@ -54,6 +54,18 @@ bottom of each tab.
   oxoacid ladder, 42 worked examples with the reasoning and an
   oxidation-state diagram, and a ten-question quiz in both directions
   (formula → name, name → formula) with immediate feedback.
+- **Biochemistry** (tab `#biochimie`, code in `site/biochimie/`): the 20
+  standard amino acids with their IUPAC–IUBMB three- and one-letter codes,
+  side-chain categories, essential and conditionally essential status, a
+  filterable table and a detail card with a backbone drawing; zwitterion
+  and isoelectric point with a pI ladder and values for the ionisable side
+  chains; peptide-bond formation, a peptide builder that counts residues,
+  bonds and water, worked examples and the four levels of protein
+  structure with drawings; carbohydrates from monosaccharides to starch,
+  glycogen and cellulose, an α/β Haworth toggle and the α-1,4 versus β-1,4
+  chain geometry; and five plant examples (cellulose and starch, sucrose
+  in the phloem, nitrate assimilation and GS–GOGAT, seed storage proteins,
+  phenylalanine/tryptophan to lignin and auxin).
 
 ## One page, one tab per tool
 
@@ -192,6 +204,7 @@ site/
   acidbase/               Acid–base tab (js/data.js: Ka, Kb, reagents; js/equilibrium.js: exact pH;
                           js/model.js: textbook routes; js/chart.js: titration curve)
   nomenclature/           Nomenclature tab (js/data.js: prefixes, ions, worked examples, quiz items)
+  biochimie/              Biochemistry tab (js/data.js: amino acids, pI, carbohydrates)
 deploy/default.conf.template   nginx config
 tests/                    node:test unit tests
 scripts/                  e2e browser checks
@@ -201,15 +214,17 @@ scripts/                  e2e browser checks
 
 Texts and drawings are original; all drawings are SVG made by the tools
 themselves. Facts come from the documents listed at the bottom of each
-tab, each one opened while writing it: mainly OpenStax *Chemistry 2e*
-(CC BY-NC-SA 4.0; values and facts only, no text copied), the IUPAC 2016
-recommendations on oxidation states (Allen electronegativities taken from
-the published paper), the PubChem periodic table (Pauling
-electronegativities), and a few Wikipedia and LibreTexts pages for
-structures and potentials missing from the textbook. Numbers are copied as
-printed; quantities the tools calculate (Ka of a base's conjugate acid from
-Kb, exact pH from the charge balance) are labelled as such. Nothing was
-copied from other online calculators.
+tab, each one opened while writing it: mainly OpenStax *Chemistry 2e* and
+*Biology 2e* (CC BY-NC-SA 4.0; values and facts only, no text copied), the
+IUPAC 2016 recommendations on oxidation states (Allen electronegativities
+taken from the published paper), the IUPAC–IUBMB amino-acid symbols, the
+WHO/FAO/UNU protein report, the PubChem periodic table (Pauling
+electronegativities), plant-physiology reviews for nitrate assimilation
+and seed storage proteins, and a few Wikipedia and LibreTexts pages for
+structures and potentials missing from the textbooks. Numbers are copied
+as printed; quantities the tools calculate (Ka of a base's conjugate acid
+from Kb, exact pH from the charge balance) are labelled as such. Nothing
+was copied from other online calculators.
 
 Colours: violet for the brand and the curves, magenta for electrons and
 lone pairs, and a warm/cool pair for the two sides of every transfer:

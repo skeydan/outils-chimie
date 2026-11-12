@@ -3,8 +3,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { TABS, DEFAULT_TAB, parseRoute, routeHash, tabForKey } from '../site/assets/route.js';
 
-test('four tabs, Lewis first', () => {
-  assert.deepEqual(TABS, ['lewis', 'redox', 'acidbase', 'nomenclature']);
+test('five tabs, Lewis first', () => {
+  assert.deepEqual(TABS, ['lewis', 'redox', 'acidbase', 'nomenclature', 'biochimie']);
   assert.equal(DEFAULT_TAB, 'lewis');
 });
 
@@ -25,15 +25,16 @@ test('routeHash is the inverse of parseRoute', () => {
   assert.equal(routeHash('lewis', 'f=H2O'), '#lewis?f=H2O');
   assert.equal(routeHash('acidbase'), '#acidbase');
   assert.equal(routeHash('nomenclature'), '#nomenclature');
+  assert.equal(routeHash('biochimie'), '#biochimie');
   for (const tab of TABS) for (const q of ['', 'a=1&b=2']) assert.deepEqual(parseRoute(routeHash(tab, q)), { tab, query: q });
   assert.throws(() => routeHash('home'));
 });
 
 test('keyboard on the tab bar: arrows wrap, Home and End', () => {
   assert.equal(tabForKey('lewis', 'ArrowRight'), 'redox');
-  assert.equal(tabForKey('nomenclature', 'ArrowRight'), 'lewis');
-  assert.equal(tabForKey('lewis', 'ArrowLeft'), 'nomenclature');
+  assert.equal(tabForKey('biochimie', 'ArrowRight'), 'lewis');
+  assert.equal(tabForKey('lewis', 'ArrowLeft'), 'biochimie');
   assert.equal(tabForKey('redox', 'Home'), 'lewis');
-  assert.equal(tabForKey('redox', 'End'), 'nomenclature');
+  assert.equal(tabForKey('redox', 'End'), 'biochimie');
   assert.equal(tabForKey('redox', 'Enter'), null);
 });

@@ -59,6 +59,7 @@ const PAGES = [
   ['redox', '#redox'],
   ['acidbase', '#acidbase'],
   ['nomenclature', '#nomenclature'],
+  ['biochimie', '#biochimie'],
 ];
 for (const device of Object.keys(devices)) {
   for (const scheme of ['light', 'dark']) {
@@ -86,7 +87,7 @@ for (const device of Object.keys(devices)) {
   ok((await page.evaluate(() => location.hash)) === '#lewis?f=SO4%5E2-', `tabs: opens on Lewis (${await page.evaluate(() => location.hash)})`);
   ok(scripts.includes('/lewis/js/app.js') && !scripts.some((u) => /\/(redox|acidbase|nomenclature|biochimie)\//.test(u)), `tabs: only the Lewis code loaded at first: ${scripts.join(' ')}`);
   ok((await page.title()) === 'Lewis structures · outils-chimie', `tabs: title ${await page.title()}`);
-  // ARIA tabs: one tablist, three tabs, each controlling one panel; one panel shown.
+  // ARIA tabs: one tablist, five tabs, each controlling one panel; one panel shown.
   const aria = await page.evaluate(() => {
     const tabs = [...document.querySelectorAll('[role="tablist"] [role="tab"]')];
     return {
@@ -98,7 +99,7 @@ for (const device of Object.keys(devices)) {
       h1: document.querySelectorAll('h1').length,
     };
   });
-  ok(aria.names.slice(0, 3).join('|') === 'Lewis|Redox (oxidation numbers)|Acid–base' && aria.names.length >= 4, `tabs: names ${aria.names}`);
+  ok(aria.names.join('|') === 'Lewis|Redox (oxidation numbers)|Acid–base|Nomenclature|Biochemistry', `tabs: names ${aria.names}`);
   ok(aria.selected[0] === 'true' && aria.selected.slice(1).every((v) => v === 'false') && aria.tabindex[0] === 0 && aria.tabindex.slice(1).every((v) => v === -1), `tabs: selection ${aria.selected} ${aria.tabindex}`);
   ok(aria.wired, 'tabs: aria-controls and aria-labelledby');
   ok(aria.shown.join() === 'panel-lewis' && aria.h1 === 1, `tabs: one panel shown (${aria.shown}), one h1 (${aria.h1})`);
@@ -110,19 +111,23 @@ for (const device of Object.keys(devices)) {
   ok((await page.evaluate(() => document.activeElement.id)) === 'tab-redox', 'tabs: ArrowRight focuses Redox');
   ok((await page.getAttribute('#tab-redox', 'aria-selected')) === 'true' && await page.isVisible('#rx-final'), 'tabs: ArrowRight opens Redox');
   ok(scripts.includes('/redox/js/app.js'), 'tabs: Redox code loaded on opening');
-  await page.keyboard.press('ArrowLeft');
-  await page.keyboard.press('ArrowLeft');
+  await page.keyboard.press('ArrowRight');
   await ready(page);
-  ok((await page.evaluate(() => [document.activeElement.id, location.hash.split('?')[0]].join())) === 'tab-nomenclature,#nomenclature', 'tabs: ArrowLeft wraps to the last tab');
+  ok((await page.evaluate(() => document.activeElement.id)) === 'tab-acidbase', 'tabs: ArrowRight moves to Acid–base');
   await page.keyboard.press('Home');
   await ready(page);
   ok((await page.evaluate(() => location.hash)) === '#lewis?f=SO4%5E2-', 'tabs: Home opens Lewis with its state');
+  await page.keyboard.press('ArrowLeft');
+  await ready(page);
+  ok((await page.evaluate(() => [document.activeElement.id, location.hash.split('?')[0]].join())) === 'tab-biochimie,#biochimie', 'tabs: ArrowLeft wraps to the last tab');
+  await page.keyboard.press('Home');
+  await ready(page);
   await page.keyboard.press('End');
   await ready(page);
-  ok(await page.isVisible('#nc-quiz'), 'tabs: End opens the last tab (Nomenclature)');
+  ok(await page.isVisible('#bc-amino'), 'tabs: End opens the last tab (Biochemistry)');
   // Tab key from the tab bar goes into the panel, not to the other tabs.
   await page.keyboard.press('Tab');
-  ok((await page.evaluate(() => document.activeElement.id)) === 'panel-nomenclature', `tabs: Tab enters the panel (${await page.evaluate(() => document.activeElement.id)})`);
+  ok((await page.evaluate(() => document.activeElement.id)) === 'panel-biochimie', `tabs: Tab enters the panel (${await page.evaluate(() => document.activeElement.id)})`);
 
   // Each tab keeps its state in the URL; the tab links carry it when you come back.
   await page.click('#tab-acidbase');
@@ -200,10 +205,10 @@ for (const device of Object.keys(devices)) {
   await ready(page);
   const y = await page.evaluate(() => document.querySelector('[role="tablist"]').getBoundingClientRect().top);
   ok(Math.abs(y) < 1 && (await page.evaluate(() => document.getElementById('panel-acidbase').getBoundingClientRect().top)) > 0, 'tabs phone: a new tab starts at its top');
-  await page.tap('#tab-nomenclature');
+  await page.tap('#tab-biochimie');
   await ready(page);
   const lastVisible = await page.evaluate(() => {
-    const t = document.getElementById('tab-nomenclature').getBoundingClientRect();
+    const t = document.getElementById('tab-biochimie').getBoundingClientRect();
     const b = document.querySelector('[role="tablist"]').getBoundingClientRect();
     return t.left >= b.left - 1 && t.right <= b.right + 1;
   });
@@ -396,6 +401,33 @@ for (const device of Object.keys(devices)) {
   await page.locator('#nc-quiz .nc-mode button[data-mode="n2f"]').click();
   ok((await page.locator('#nc-quiz .nc-qz-target.is-name').count()) === 1, 'nomenclature: name-to-formula mode shows a name');
   await page.screenshot({ path: `${SHOTS}/interact-nomenclature-fr.png`, fullPage: true });
+  await ctx.close();
+}
+
+// ---------------------------------------------------------------- Biochemistry
+{
+  const { ctx, page } = await newPage('desktop', 'light', 'fr');
+  await go(page, '#biochimie');
+  ok(/molécules du vivant/.test(await text(page, '#panel-biochimie h1')), 'biochimie: French title');
+  ok((await page.locator('.bc-aa-table tbody tr').count()) === 20, 'biochimie: twenty amino acids');
+  ok((await page.locator('.bc-backbone').count()) === 1, 'biochimie: amino-acid backbone drawn');
+  await page.locator('.bc-filter button[data-cat="basic"]').click();
+  ok((await page.locator('.bc-aa-table tbody tr').count()) === 3, 'biochimie: basic filter');
+  await page.locator('#bc-essential').click();
+  ok((await page.locator('.bc-aa-table tbody tr').count()) === 2, 'biochimie: essential basic amino acids are histidine and lysine');
+  await page.locator('#bc-essential').click();
+  await page.locator('.bc-filter button[data-cat="all"]').click();
+  ok((await page.locator('.bc-aa-table tbody tr').count()) === 20, 'biochimie: filter cleared');
+  await page.selectOption('#bc-pep-select', 'gly');
+  await page.click('.bc-builder .btn');
+  await page.click('.bc-builder .btn');
+  ok((await page.locator('.bc-bead').count()) === 2, 'biochimie: two peptide beads');
+  const counts = await text(page, '.bc-pep-counts');
+  ok(/2/.test(counts) && /1/.test(counts), `biochimie: peptide counters (${counts})`);
+  await page.locator('[data-anomer="alpha"]').click();
+  ok((await page.getAttribute('[data-anomer="alpha"]', 'aria-pressed')) === 'true', 'biochimie: alpha anomer selected');
+  ok((await page.locator('.sources li').count()) >= 9, 'biochimie: sources listed');
+  await page.screenshot({ path: `${SHOTS}/interact-biochimie-fr.png`, fullPage: true });
   await ctx.close();
 }
 

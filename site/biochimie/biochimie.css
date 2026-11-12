@@ -1,0 +1,139 @@
+/* Biochemistry tab: amino-acid table and detail card, pI ladder, peptide
+   builder, protein-structure figures, Haworth projections, carbohydrate
+   table and the plant examples. Category colours are accents only; every
+   colour is backed by a written label. */
+
+.bc-head { max-width: 62rem; }
+.bc-toc { margin: 1.4rem 0 1rem; }
+.bc-toc h2 { font-size: .95rem; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-2); margin-bottom: .3rem; }
+.bc-toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem .9rem; }
+.bc-toc a { font-size: .92rem; }
+
+.bc-small { color: var(--ink-2); font-size: .82rem; }
+
+/* ---------- tables */
+.bc-tablewrap { max-width: 100%; overflow-x: auto; scrollbar-width: thin; }
+.bc-table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: .4rem 0 1rem; }
+.bc-table caption { text-align: left; font-weight: 650; margin-bottom: .35rem; }
+.bc-table th, .bc-table td { text-align: left; padding: .4rem .6rem; border-bottom: 1px solid var(--hairline); vertical-align: top; }
+.bc-table thead th { color: var(--ink-2); font-size: .82rem; border-bottom: 2px solid var(--border); }
+.bc-table tbody th { white-space: nowrap; }
+.bc-aa-table { min-width: 560px; }
+.bc-aa-table td, .bc-aa-table tbody th { padding: .38rem .5rem; }
+.bc-carb-table { min-width: 760px; }
+.bc-aa-table tr.is-selected th, .bc-aa-table tr.is-selected td { background: var(--violet-wash); }
+.bc-formula sub { font-size: .72em; }
+
+/* ---------- amino acids */
+.bc-aa-tools { display: flex; flex-wrap: wrap; gap: .6rem; align-items: center; margin: 1rem 0 .8rem; }
+.bc-filter { flex-wrap: wrap; }
+.bc-filter button { min-height: 36px; }
+.bc-aa-layout { display: grid; gap: 14px; }
+@media (min-width: 900px) {
+  .bc-aa-layout { grid-template-columns: minmax(0, 1.35fr) minmax(280px, .65fr); align-items: start; }
+}
+.bc-aa-btn { font: inherit; font-weight: 600; color: var(--ink); background: none; border: 0; border-bottom: 1px dotted var(--muted); padding: .1rem 0; cursor: pointer; text-align: left; }
+.bc-aa-btn:hover { border-bottom-color: var(--violet); color: var(--violet); }
+.bc-aa-btn[aria-pressed="true"] { color: var(--violet); border-bottom: 2px solid var(--violet); }
+.bc-code { font-family: var(--mono); color: var(--ink-2); }
+
+.bc-cat { display: inline-block; padding: .1rem .55rem; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--cat, var(--muted)); font-size: .78rem; font-weight: 650; white-space: nowrap; }
+.bc-cat-nonpolar { --cat: var(--muted); }
+.bc-cat-polar { --cat: var(--acceptor); }
+.bc-cat-acidic { --cat: var(--donor); }
+.bc-cat-basic { --cat: var(--violet); }
+.bc-cat-aromatic { --cat: var(--electron); }
+
+.bc-aa-detail { min-width: 0; }
+.bc-aa-card { background: var(--surface-2); border: 1px solid var(--border); border-radius: 14px; padding: 1rem; }
+.bc-aa-head { display: flex; justify-content: space-between; gap: .6rem; align-items: flex-start; }
+.bc-aa-head h3 { margin: .1rem 0 .15rem; }
+.bc-aa-head p { margin: 0; }
+.bc-backbone { width: 100%; max-width: 300px; height: auto; display: block; margin: .4rem auto; }
+.bc-facts { display: grid; grid-template-columns: auto 1fr; gap: .25rem .7rem; margin: .5rem 0; font-size: .9rem; }
+.bc-facts dt { color: var(--ink-2); }
+.bc-facts dd { margin: 0; }
+.bc-note { background: var(--surface); border-left: 3px solid var(--violet); border-radius: 8px; padding: .55rem .7rem; font-size: .9rem; margin: .4rem 0 0; }
+
+/* ---------- charge and pI */
+.bc-pi-ladder { display: grid; gap: 8px; margin: .8rem 0; }
+@media (min-width: 620px) { .bc-pi-ladder { grid-template-columns: repeat(3, 1fr); } }
+.bc-pi-step { display: flex; flex-direction: column; gap: .15rem; padding: .55rem .7rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface-2); font-size: .9rem; border-top: 4px solid var(--muted); }
+.bc-pi-step span { color: var(--ink-2); font-family: var(--mono); font-size: .82rem; }
+.bc-pi-step.is-low { border-top-color: var(--donor); }
+.bc-pi-step.is-mid { border-top-color: var(--acceptor); }
+.bc-pi-step.is-high { border-top-color: var(--violet); }
+.bc-pi-wrap { max-width: 38rem; }
+.bc-pi-table { min-width: 320px; }
+
+/* ---------- peptides */
+.bc-eq { display: flex; flex-wrap: wrap; gap: .4rem .6rem; align-items: center; font-family: var(--mono); font-size: .92rem; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; padding: .7rem .8rem; margin: .8rem 0 .3rem; }
+.bc-eq-part { white-space: nowrap; }
+.bc-eq-part.is-product { font-weight: 700; }
+.bc-op { color: var(--ink-2); }
+.bc-arrow { color: var(--violet); font-weight: 700; }
+
+.bc-builder { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: .6rem 0; }
+.bc-builder label { font-weight: 650; }
+.bc-builder select { font: inherit; padding: .5rem .6rem; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--ink); max-width: 100%; }
+.bc-pep-out { background: var(--surface-2); border: 1px dashed var(--border); border-radius: 10px; padding: .8rem; min-height: 4rem; }
+.bc-pep-beads { display: flex; flex-wrap: wrap; gap: .3rem; min-height: 2.2rem; }
+.bc-bead { display: grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%; border: 2px solid var(--cat, var(--muted)); background: var(--surface); font-weight: 700; font-size: .9rem; }
+.bc-pep-seq { margin: .5rem 0 .2rem; font-family: var(--mono); overflow-wrap: anywhere; }
+.bc-pep-counts { margin: .2rem 0; color: var(--ink-2); font-size: .9rem; }
+
+.bc-examples { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.bc-example { border: 1px solid var(--border); border-radius: 12px; padding: .8rem .9rem; background: var(--surface); }
+.bc-example h4 { margin: 0 0 .4rem; }
+.bc-example p { margin: .3rem 0; font-size: .92rem; }
+.bc-levels { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 760px) { .bc-levels { grid-template-columns: 1fr; } }
+.bc-level { border: 1px solid var(--border); border-radius: 12px; padding: .8rem; background: var(--surface); margin: 0; }
+.bc-level-svg { width: 100%; max-height: 160px; display: block; }
+.bc-level figcaption h4 { margin: .4rem 0 .25rem; }
+.bc-level figcaption p { margin: 0; font-size: .9rem; }
+
+/* ---------- carbohydrates */
+.bc-carb-top { display: grid; gap: 14px; }
+@media (min-width: 1180px) { .bc-carb-top { grid-template-columns: minmax(250px, .6fr) minmax(0, 1.4fr); align-items: start; } }
+.bc-ring-fig { margin: 0; }
+.bc-anomer { display: inline-flex; }
+.bc-haworth { min-height: 190px; }
+.bc-haworth-svg { width: 100%; max-width: 300px; height: auto; display: block; margin: .4rem auto; }
+.bc-two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: .6rem; }
+@media (max-width: 700px) { .bc-two { grid-template-columns: 1fr; } }
+.bc-fig { margin: 0; background: var(--surface-2); border: 1px solid var(--border); border-radius: 12px; padding: .7rem; }
+.bc-fig figcaption { font-size: .9rem; color: var(--ink-2); }
+.bc-fig figcaption strong { color: var(--ink); }
+.bc-glycan-svg { width: 100%; max-height: 130px; display: block; }
+
+/* ---------- in the plant */
+.bc-plant-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+.bc-plant-card { border: 1px solid var(--border); border-top: 4px solid var(--violet); border-radius: 12px; padding: .85rem .95rem; background: var(--surface-2); }
+.bc-plant-card h3 { font-size: 1rem; margin: 0 0 .35rem; }
+.bc-plant-card p { margin: 0; font-size: .92rem; }
+
+/* ---------- SVG */
+.bc-bond { stroke: var(--ink-2); stroke-width: 2; }
+.bc-node { fill: var(--surface); stroke: var(--ink); stroke-width: 1.5; }
+.bc-svg-t { font: 600 15px var(--font); fill: var(--ink); }
+.bc-svg-small { font: 12px var(--font); fill: var(--ink-2); }
+.bc-ring { fill: var(--surface); stroke: var(--ink); stroke-width: 2; }
+.bc-ring-mask { fill: var(--surface); stroke: none; }
+.bc-ring-small { stroke-width: 1.5; }
+.bc-helix { fill: none; stroke: var(--violet); stroke-width: 3; }
+.bc-hbond { stroke: var(--acceptor); stroke-width: 1.5; stroke-dasharray: 4 4; }
+.bc-sheet { fill: none; stroke: var(--acceptor); stroke-width: 3; }
+.bc-globule { fill: var(--violet-wash); stroke: var(--violet); stroke-width: 2; }
+.bc-hydrophobic { fill: var(--donor); opacity: .75; }
+.bc-ss { stroke: var(--donor); stroke-width: 3; }
+.bc-subunit-a { fill: var(--violet-wash); stroke: var(--violet); stroke-width: 2; }
+.bc-subunit-b { fill: var(--acceptor-wash); stroke: var(--acceptor); stroke-width: 2; }
+.bc-bead-svg { fill: var(--surface-2); stroke: var(--ink-2); stroke-width: 2; }
+
+@media (max-width: 520px) {
+  .bc-eq { font-size: .82rem; }
+  .bc-builder { align-items: stretch; }
+  .bc-builder select { flex: 1 1 100%; }
+  .bc-haworth { min-height: 170px; }
+}

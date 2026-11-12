@@ -17,6 +17,7 @@ const LOADERS = {
   redox: () => import('../redox/js/app.js'),
   acidbase: () => import('../acidbase/js/app.js'),
   nomenclature: () => import('../nomenclature/js/app.js'),
+  biochimie: () => import('../biochimie/js/app.js'),
 };
 const DICT = {
   ...COMMON,
@@ -26,6 +27,7 @@ const DICT = {
   'tab.redox.more': { en: ' (oxidation numbers)', fr: ' (nombres d’oxydation)' },
   'tab.acidbase': { en: 'Acid–base', fr: 'Acide–base' },
   'tab.nomenclature': { en: 'Nomenclature', fr: 'Nomenclature' },
+  'tab.biochimie': { en: 'Biochemistry', fr: 'Biochimie' },
   loading: { en: 'Loading…', fr: 'Chargement…' },
   'load.error': { en: 'This tool could not be loaded. Reload the page to try again.', fr: 'Cet outil n’a pas pu être chargé. Rechargez la page pour réessayer.' },
 };

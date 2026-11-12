@@ -5,7 +5,7 @@
 // Any other hash (#src-..., #main, empty) is not a route: the page anchors
 // use it, and the app opens on the first tab.
 
-export const TABS = ['lewis', 'redox', 'acidbase', 'nomenclature'];
+export const TABS = ['lewis', 'redox', 'acidbase', 'nomenclature', 'biochimie'];
 export const DEFAULT_TAB = TABS[0];
 
 /** '#redox?sp=Cu' -> { tab: 'redox', query: 'sp=Cu' }; null when the hash is not a route. */
